@@ -1,0 +1,344 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono:wght@400;600&display=swap');
+
+$ff-text: 'Roboto Mono', monospace;
+$fs-text: 1em;
+
+$ff-title: 'Poppins', sans-serif;
+$fs-title: 1.5em;
+
+$fw-bold: 600;
+$fw-regular: 400;
+
+$line-height: 1.6;
+$time: 50ms;
+
+@mixin scrollbar($text-color, $white) {
+  &::-webkit-scrollbar-track {
+    background-color: $white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $text-color;
+    border-radius: 5px;
+  }
+}
+
+@mixin theme($title-color, $text-color, $main-bg, $white) {
+  body {
+    color: $text-color;
+    background-color: $main-bg;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: $title-color;
+  }
+
+  .button {
+    color: $text-color;
+  }
+
+  .app-wrapper {
+    background-color: $white;
+  }
+
+  .app-title {
+    color: $title-color;
+  }
+
+  .tasks-list {
+    @include scrollbar($text-color, $white);
+  }
+
+  .reset-completed {
+    color: $text-color;
+    background-color: $main-bg;
+  }
+}
+
+@mixin app-wrapper {
+  @include flex(column, center, stretch);
+
+  width: 90%;
+  max-height: 80%;
+  border-radius: 0.25em;
+  overflow: hidden;
+  transition: all $time ease-in-out;
+
+  .app-header {
+    @include height();
+    @include border();
+    @include flex(row, stretch, center);
+
+    padding: 1em;
+
+    .app-title {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: $fs-title;
+    }
+  }
+
+  .add-book {
+    @include height();
+    @include border();
+
+    position: relative;
+
+    .book-input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+
+      #book-input {
+        width: 100%;
+        height: 100%;
+        padding: 1em;
+
+        &::placeholder {
+          font-style: oblique;
+        }
+      }
+    }
+
+    .submit-book {
+      position: absolute;
+      right: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .tasks-list {
+    @include reset-list();
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .task {
+      width: 100%;
+      padding: 1em;
+
+      @include height();
+      @include border();
+      @include flex(row, space-between, center);
+
+      .task-description {
+        width: 100%;
+        height: inherit;
+        padding: 0.25em;
+
+        @include flex(row, flex-start, center);
+      }
+
+      .task-mod {
+        display: none;
+      }
+
+      .del {
+        display: none;
+      }
+    }
+
+    .edit {
+      background-color: hsl(60, 90%, 65%);
+
+      .task-description {
+        display: none;
+      }
+
+      .task-mod {
+        width: 100%;
+        height: inherit;
+        padding: 0.25em;
+        font-family: $ff-text;
+
+        @include flex(row, flex-start, center);
+      }
+
+      .del {
+        display: block;
+      }
+
+      .dots {
+        display: none;
+      }
+    }
+
+    .completed {
+      .task-description {
+        text-decoration: line-through;
+      }
+    }
+  }
+
+  .reset-completed {
+    @include height();
+    @include flex();
+
+    cursor: pointer;
+    width: 100%;
+    text-decoration: underline;
+    transition: all $time ease-in-out;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+@mixin box-shadow($shadow-color) {
+  box-shadow:
+    0 0.6px 0.8px $shadow-color,
+    -0.1px 2.7px 3.7px -0.2px $shadow-color,
+    -0.1px 5.7px 7.9px -0.5px $shadow-color,
+    -0.3px 12.3px 17.1px -0.7px $shadow-color;
+}
+
+@mixin reset-list {
+  list-style: none;
+}
+
+@mixin flex($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin height {
+  min-height: 3em;
+  height: 3em;
+}
+
+@mixin border {
+  border-bottom: 1px solid #999;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  $title-color: #333;
+  $text-color: #555;
+  $main-bg: #f6f6f6;
+  $white: #fff;
+
+  @include theme($title-color, $text-color, $main-bg, $white);
+
+  // Shadow color
+  $shadow-color: #858585;
+
+  .app-wrapper {
+    @include box-shadow($shadow-color);
+    @include app-wrapper();
+  }
+
+  @media only screen and (min-width: 600px) {
+    .app-wrapper {
+      width: 65%;
+    }
+  }
+
+  @media only screen and (min-width: 992px) {
+    .app-wrapper {
+      width: 45%;
+    }
+  }
+
+  &.dark {
+    $title-color: hsl(0, 50%, 95%);
+    $text-color: hsl(0, 50%, 85%);
+    $main-bg: #1d1d1d;
+    $white: #333;
+
+    @include theme($title-color, $text-color, $main-bg, $white);
+
+    #book-input {
+      color: $text-color;
+
+      &::placeholder {
+        color: inherit;
+      }
+    }
+
+    .edit {
+      background-color: #472d4f !important;
+      color: $text-color;
+
+      .task-mod {
+        color: $text-color;
+      }
+    }
+
+    // Shadow color
+    $shadow-color: #000;
+
+    .app-wrapper {
+      @include box-shadow($shadow-color);
+      @include app-wrapper();
+    }
+
+    @media only screen and (min-width: 600px) {
+      .app-wrapper {
+        width: 65%;
+      }
+    }
+
+    @media only screen and (min-width: 992px) {
+      .app-wrapper {
+        width: 45%;
+      }
+    }
+  }
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  transition: all $time ease-in-out;
+
+  @include flex();
+
+  font-size: $fs-text;
+  font-weight: $fw-regular;
+  font-family: $ff-text;
+}
+
+.dark-mode-toggle {
+  position: fixed;
+  top: 2em;
+  right: 2em;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: $fw-bold;
+  font-family: $ff-title;
+}
+
+input:focus {
+  outline: none;
+}
+
+.button {
+  width: 1.75em;
+  height: auto;
+  cursor: pointer;
+}
