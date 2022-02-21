@@ -32,7 +32,7 @@ To get the project up and running you need a browser.
 
 ### Install
 
-To get the project locally, run `git clone git@github.com:jssol/todo-list.git`
+To get the project locally, run `git clone git@github.com:jssol/todo-review.git`
 
 ### Usage
 
